@@ -151,12 +151,13 @@ module.exports = function (app) {
       var cycletime = 0.0;
       if (options.blinks && options.blinks.length > 0){
         options.blinks.forEach(blink => {
-          //app.debug(param);
+          app.debug(blink);
           if (typeof(blink.lon) == "number" && typeof(blink.loff) == "number"){
             cycletime = cycletime + blink.lon + blink.loff;
           }
         })
       }
+      console.log("cycletime: " + cycletime);
       return cycletime;
     }
 
@@ -164,7 +165,7 @@ module.exports = function (app) {
       var ontime = 0.0;
       if (options.blinks && options.blinks.length > 0){
         options.blinks.forEach(blink => {
-          //app.debug(param);
+          //app.debug(blink);
           if (typeof(blink.lon) == "number" && typeof(blink.loff) == "number"){
             ontime = ontime + blink.lon;
           }
@@ -178,7 +179,7 @@ module.exports = function (app) {
       var offtime = 0.0;
       if (options.blinks && options.blinks.length > 0){
         options.blinks.forEach(blink => {
-          //app.debug(param);
+          //app.debug(blink);
           if (typeof(blink.lon) == "number" && typeof(blink.loff) == "number"){
             offtime = offtime + blink.loff;
           }
@@ -218,7 +219,7 @@ module.exports = function (app) {
     var i =0;
     function countingcycletime(){
       i = i + 1;
-      console.log("Enter in countingcycletime cptr: " + i);
+      //console.log("Enter in countingcycletime cptr: " + i);
       if(checklightstate == 1){timeson = timeson + 1};
       if(checklightstate == 0){timesoff = timesoff + 1};
     }
