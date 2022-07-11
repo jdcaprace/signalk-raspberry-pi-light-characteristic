@@ -216,16 +216,25 @@ module.exports = function (app) {
     var lightratio = 0;
     var vontime = ontime();
     var vofftime = offtime();
+    var vcycletime = cycletime();
     var reflightratio = vontime / vofftime;
     var lighthealth = 0; //0 = healthy, 1 = not healthy;
     var i = 0;
     var j = 0;
+
     function countingcycletime(){
       i = i + 1;
       console.log("Enter in countingcycletime cptr: " + i);
       var state = checklightstate();
-      if(state == 1){timeson = timeson + 1};
-      if(state == 0){timesoff = timesoff + 1};
+      if(state == 1){
+        timeson = timeson + 1;
+        console.log("timeson: " + timeson);
+      }
+      if(state == 0){
+        timesoff = timesoff + 1;
+        console.log("timesoff: " + timesoff);
+      }
+      //return [timeson, timesoff];
     }
 
     // repeat with the interval of x millisseconds
@@ -258,7 +267,7 @@ module.exports = function (app) {
       lightratio = 0;
       i = 0;
       timerId = setInterval(() => {countingcycletime();}, options.currentrate);//run again
-    }, cycletime * 1000);//check during one full cycletime
+    }, vcycletime * 1000);//check during one full cycletime
 
 
     function sendlighthealth(status){
