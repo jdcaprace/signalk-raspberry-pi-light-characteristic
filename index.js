@@ -205,7 +205,7 @@ module.exports = function (app) {
       } else {
         lightstate = 0;//if off = 0
       }
-      //console.log("lightstate: " + lightstate);
+      console.log("lightstate: " + lightstate);
       return lightstate;
     }
 
@@ -214,14 +214,14 @@ module.exports = function (app) {
     var timeson = 0;
     var timesoff = 0;
     var lightratio = 0;
-    var reflightratio = ontime/offtime;
+    var reflightratio = ontime()/offtime();
     var lighthealth = 0; //0 = healthy, 1 = not healthy;
-    var i =0;
+    var i = 0;
     function countingcycletime(){
       i = i + 1;
       //console.log("Enter in countingcycletime cptr: " + i);
-      if(checklightstate == 1){timeson = timeson + 1};
-      if(checklightstate == 0){timesoff = timesoff + 1};
+      if(checklightstate() == 1){timeson = timeson + 1};
+      if(checklightstate() == 0){timesoff = timesoff + 1};
     }
 
     // repeat with the interval of x millisseconds
@@ -264,7 +264,7 @@ module.exports = function (app) {
       app.handleMessage(plugin.id, delta);
     }
         
-    timer = setInterval(sendlighthealth(lighthealth), options.rate * 60 * 1000);
+    //timer = setInterval(sendlighthealth(lighthealth), options.rate * 60 * 1000);
   }
 
   plugin.stop = function () {
