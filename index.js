@@ -57,19 +57,19 @@ module.exports = function (app) {
       lowcurrent: {
         type: 'number',
         title: 'Low current value in amper',
-        decription: 'This is the value of the current in amper that is measured in the circuit when the load (light) is off.',
+        description: 'This is the value of the current in amper that is measured in the circuit when the load (light) is off.',
         default: 0.3,
       },
       highcurrent: {
         type: 'number',
-        title: 'High current calue in anper',
-        decription: 'This is the value of the current in amper that is measured in the circuit when the load (light) is on.',
+        title: 'High current value in amper',
+        description: 'This is the value of the current in amper that is measured in the circuit when the load (light) is on.',
         default: 2,
       },
       errormargin: {
         type: 'number',
         title: 'Error margin in percent, example: 0.05 for 5%',
-        decription: 'This is the error margin for the assessment of the light behaviour.',
+        description: 'This is the error margin for the assessment of the light behaviour.',
         default: 0.05,
       },
       blinks: {
@@ -140,9 +140,9 @@ module.exports = function (app) {
 	    var loadvoltageV = busvoltage + (shuntvoltage / 1000);
 	    //console.log("Load voltage (V): " + loadvoltageV);
 
-      //.catch((err) => {
-      //console.log(`ina219 read error: ${err}`);
-      //});
+      .catch((err) => {
+      console.log(`ina219 read error: ${err}`);
+      });
       return busvoltage;
     }
 
@@ -214,7 +214,10 @@ module.exports = function (app) {
     var lightratio = 0;
     var reflightratio = ontime/offtime;
     var lighthealth = 0; //0 = healthy, 1 = not healthy;
+    var i =0;
     function countingcycletime(){
+      i = i + 1;
+      console.log("Enter in countingcycletime cptr: " + i);
       if(checklightstate == 1){timeson = timeson + 1};
       if(checklightstate == 0){timesoff = timesoff + 1};
     }
@@ -245,6 +248,7 @@ module.exports = function (app) {
       timeson = 0; //reinitialized counters and variables
       timesoff = 0;
       lightratio = 0;
+      i = 0;
       timerId = setInterval(() => {countingcycletime();}, options.currentrate);//run again
     }, cycletime * 1000);//check during one full cycletime
 
