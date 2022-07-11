@@ -123,11 +123,12 @@ module.exports = function (app) {
 	  // Read ina219 sensor.
     // Here we only use the bus voltage reading because an external non invasive sensor is used.
     // To obtain the value of the current we will multiply the voltage value with a voltage multiplier.
+    //var busvoltage = 0.0;
     async function readina219() {
 		  const sensor = await ina219(Number(options.i2c_address), options.i2c_bus);
       await sensor.calibrate32V2A();
 
-		  const busvoltage = await sensor.getBusVoltage_V();
+		  busvoltage = await sensor.getBusVoltage_V();
       console.log("Bus voltage (V): " + busvoltage);
       const shuntvoltage = await sensor.getShuntVoltage_mV();
       //console.log("Shunt voltage (mV): " + shuntvoltage);
@@ -139,10 +140,10 @@ module.exports = function (app) {
 	    //console.log("Load Current (A): " + shuntcurrentA);
 	    var loadvoltageV = busvoltage + (shuntvoltage / 1000);
 	    //console.log("Load voltage (V): " + loadvoltageV);
-
-      .catch((err) => {
-      console.log(`ina219 read error: ${err}`);
-      });
+      
+      //.catch((err) => {
+      //console.log(`ina219 read error: ${err}`);
+      //});
       return busvoltage;
     }
 
