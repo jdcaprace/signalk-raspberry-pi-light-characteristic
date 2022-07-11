@@ -129,7 +129,7 @@ module.exports = function (app) {
       await sensor.calibrate32V2A();
 
 		  busvoltage = await sensor.getBusVoltage_V();
-      console.log("Bus voltage (V): " + busvoltage);
+      //console.log("Bus voltage (V): " + busvoltage);
       const shuntvoltage = await sensor.getShuntVoltage_mV();
       //console.log("Shunt voltage (mV): " + shuntvoltage);
       const shuntcurrent = await sensor.getCurrent_mA();
@@ -141,9 +141,9 @@ module.exports = function (app) {
 	    var loadvoltageV = busvoltage + (shuntvoltage / 1000);
 	    //console.log("Load voltage (V): " + loadvoltageV);
       
-      app.catch((err) => {
-      console.log(`ina219 read error: ${err}`);
-      });
+      //app.catch((err) => {
+      //console.log(`ina219 read error: ${err}`);
+      //});
       return busvoltage;
     }
 
@@ -194,7 +194,7 @@ module.exports = function (app) {
       var lightstate = 0;
       var busvoltage = readina219();
       var buscurrent = busvoltage * options.voltagemultiplier;
-      //console.log("Buscurrent: " + buscurrent);
+      //console.log("The bus current is: " + buscurrent);
 
       //defining the threshold
       var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
@@ -214,14 +214,18 @@ module.exports = function (app) {
     var timeson = 0;
     var timesoff = 0;
     var lightratio = 0;
-    var reflightratio = ontime()/offtime();
+    var vontime = ontime();
+    var vofftime = offtime();
+    var reflightratio = vontime / vofftime;
     var lighthealth = 0; //0 = healthy, 1 = not healthy;
     var i = 0;
+    var j = 0;
     function countingcycletime(){
       i = i + 1;
-      //console.log("Enter in countingcycletime cptr: " + i);
-      if(checklightstate() == 1){timeson = timeson + 1};
-      if(checklightstate() == 0){timesoff = timesoff + 1};
+      console.log("Enter in countingcycletime cptr: " + i);
+      var state = checklightstate();
+      if(state == 1){timeson = timeson + 1};
+      if(state == 0){timesoff = timesoff + 1};
     }
 
     // repeat with the interval of x millisseconds
@@ -230,6 +234,8 @@ module.exports = function (app) {
     // after x seconds stop, do the business and run again.
     setTimeout(() => {
       clearInterval(timerId);//stop
+      j = j + 1;
+      console.log("j: " + j);
       console.log("timeson: " + timeson);
       console.log("timesoff: " + timesoff);
       lightratio =  timeson / timesoff;
