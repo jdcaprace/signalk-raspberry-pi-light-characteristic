@@ -1,9 +1,9 @@
 {
-  "name": "signalk-raspberry-pi-ina219",
+  "name": "signalk-raspberry-pi-light-characteristic",
   "author": "Jean-David Caprace",
-  "description": "SignalK node server plugin that reads data from ina219 current/voltage/power sensors on Raspberry-Pi",
+  "description": "Experimental! SignalK node server plugin that check the state of the light characteristic using ina219 sensor.",
   "license": "MIT",
-  "homepage": "https://github.com/jdcaprace/signalk-raspberry-pi-ina219#readme",
+  "homepage": "https://github.com/jdcaprace/signalk-raspberry-pi-light-characteristic#readme",
   "version": "0.0.1",
   "main": "index.js",
   "keywords": [
@@ -11,10 +11,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jdcaprace/signalk-raspberry-pi-ina219.git"
+    "url": "git+https://github.com/jdcaprace/signalk-raspberry-pi-light-characteristic.git"
   },
   "bugs": {
-    "url": "https://github.com/jdcaprace/signalk-raspberry-pi-ina219/issues"
+    "url": "https://github.com/jdcaprace/signalk-raspberry-pi-light-characteristic/issues"
   },
   "dependencies": {
     "ina219-async": "1.0.2"
