@@ -141,9 +141,9 @@ module.exports = function (app) {
 	    var loadvoltageV = busvoltage + (shuntvoltage / 1000);
 	    //console.log("Load voltage (V): " + loadvoltageV);
       
-      //.catch((err) => {
-      //console.log(`ina219 read error: ${err}`);
-      //});
+      app.catch((err) => {
+      console.log(`ina219 read error: ${err}`);
+      });
       return busvoltage;
     }
 
