@@ -234,41 +234,54 @@ module.exports = function (app) {
         timesoff = timesoff + 1;
         console.log("timesoff: " + timesoff);
       }
-      //return [timeson, timesoff];
     }
 
-    // repeat with the interval of x millisseconds
-    let timerId = setInterval(() => {countingcycletime();}, options.currentrate);
+    //This is the global loop to repeat the measurement cycle.
+    function mainrepeatmeasuring(){
+      console.log('Enter in repeatmeasuring.');
 
-    // after x seconds stop, do the business and run again.
-    setTimeout(() => {
-      clearInterval(timerId);//stop
-      j = j + 1;
-      console.log("j: " + j);
-      console.log("timeson: " + timeson);
-      console.log("timesoff: " + timesoff);
-      lightratio =  timeson / timesoff;
-      console.log("reflightratio: " + reflightratio);
-      console.log("lightratio: " + lightratio);
+      // repeat with the interval of x millisseconds
+      var timerId = setInterval(() => {countingcycletime();}, options.currentrate);
 
-      //Verifying if the measurement is inside the margin of tolerance
-      var lowref = reflightratio - (options.errormargin * reflightratio)
-      var highref = reflightratio + (options.errormargin * reflightratio)
-      console.log("lowref: " + lowref);
-      console.log("highref: " + highref);
-      if(lightratio >= lowref && lightratio <= highref){
-        lighthealth = 0;//Healthy
-      } else {
-        lighthealth = 1;//Not healthy
-      }
-      console.log("OUTPUT - lighthealth: " + lighthealth);
-      timeson = 0; //reinitialized counters and variables
-      timesoff = 0;
-      lightratio = 0;
-      i = 0;
-      timerId = setInterval(() => {countingcycletime();}, options.currentrate);//run again
-    }, vcycletime * 1000);//check during one full cycletime
+      //stop the measuring cycle and do the business
+      stopmeasuring(timerId);
 
+      //sending the result to signalK
+      sendlighthealth(lighthealth);
+      
+      var waitingtimebetweencycles = ((vcycletime + 5) * 1000)/3;
+      setTimeout(mainrepeatmeasuring, waitingtimebetweencycles);//wait 1/3 of the cycle time and start again.
+    }
+
+    function stopmeasuring(timerId){
+    // after x seconds stop and do the business.
+      setTimeout(() => {
+        clearInterval(timerId);//stop
+        j = j + 1;
+        console.log("j: " + j);
+        console.log("timeson: " + timeson);
+        console.log("timesoff: " + timesoff);
+        lightratio =  timeson / timesoff;
+        console.log("reflightratio: " + reflightratio);
+        console.log("lightratio: " + lightratio);
+
+        //Verifying if the measurement is inside the margin of tolerance
+        var lowref = reflightratio - (options.errormargin * reflightratio)
+        var highref = reflightratio + (options.errormargin * reflightratio)
+        console.log("lowref: " + lowref);
+        console.log("highref: " + highref);
+        if(lightratio >= lowref && lightratio <= highref){
+          lighthealth = 0;//Healthy
+        } else {
+          lighthealth = 1;//Not healthy
+        }
+        console.log("OUTPUT - lighthealth: " + lighthealth);
+        timeson = 0; //reinitialized counters and variables
+        timesoff = 0;
+        lightratio = 0;
+        i = 0;
+      }, (vcycletime + 5) * 1000);//check during one full cycletime
+    }
 
     function sendlighthealth(status){
       //To check the light state
@@ -278,8 +291,8 @@ module.exports = function (app) {
       // send data
       app.handleMessage(plugin.id, delta);
     }
-        
-    //timer = setInterval(sendlighthealth(lighthealth), options.rate * 60 * 1000);
+    
+    mainrepeatmeasuring();
   }
 
   plugin.stop = function () {
