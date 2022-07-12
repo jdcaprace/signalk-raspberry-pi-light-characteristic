@@ -239,6 +239,7 @@ module.exports = function (app) {
       i = i + 1;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
+      console.log('The checklite state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
       if(state == 1){
         timeson = timeson + 1;
         console.log("timeson: " + timeson);
