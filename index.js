@@ -185,9 +185,12 @@ module.exports = function (app) {
 
     //Check if the light is on or off depending of the current threshold
     function checklightstate(){
+      
+      
       var lightstate = 0;
       var promisevoltage = readina219();
 
+      (async () => {
       promisevoltage.then((value) => {
         console.log('Interpret premise: ' + value);
         var busvoltage = value;   
@@ -205,9 +208,12 @@ module.exports = function (app) {
         } else {
           lightstate = 0;//if off = 0
         }
-        console.log("lightstate: " + lightstate);
-        return lightstate;
+
       });
+      await promisevoltage;
+      })();
+      console.log("lightstate: " + lightstate);
+      return lightstate;
     }
 
     //TODO check day-night to send warning during night only!
@@ -240,6 +246,9 @@ module.exports = function (app) {
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
       console.log('The checklite state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
+
+      //state.then((value) => {console.log('Resolving the checklite state: ' + value);});
+
       if(state == 1){
         timeson = timeson + 1;
         console.log("timeson: " + timeson);
