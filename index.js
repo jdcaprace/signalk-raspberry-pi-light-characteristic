@@ -186,7 +186,15 @@ module.exports = function (app) {
     //Check if the light is on or off depending of the current threshold
     function checklightstate(){
       var lightstate = 0;
-      var busvoltage = readina219();
+      var promisevoltage = readina219();
+      var busvoltage = 0.0;
+
+      promisevoltage.then((value) => {
+        console.log('Interpret premise: ' + value);
+        busvoltage = value;
+        // expected output: 123
+      });
+
       console.log("The bus voltage is: " + busvoltage);
       var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
       console.log("The bus current is: " + buscurrent);
