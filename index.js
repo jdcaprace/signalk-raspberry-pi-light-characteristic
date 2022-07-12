@@ -293,7 +293,7 @@ module.exports = function (app) {
         timesoff = 0;
         lightratio = 0;
         i = 0;
-      }, (vcycletime * 1000);//check during one full cycletime
+      }, vcycletime * 1000);//check during one full cycletime
     }
 
     function sendlighthealth(status){
