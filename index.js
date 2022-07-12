@@ -122,8 +122,8 @@ module.exports = function (app) {
 		  const sensor = await ina219(Number(options.i2c_address), options.i2c_bus);
       await sensor.calibrate32V2A();
 
-		  busvoltage = await sensor.getBusVoltage_V();
-      //console.log("Bus voltage (V): " + busvoltage);
+		  var busvoltage = await sensor.getBusVoltage_V();
+      console.log("Bus voltage (V): " + busvoltage);
       const shuntvoltage = await sensor.getShuntVoltage_mV();
       //console.log("Shunt voltage (mV): " + shuntvoltage);
       const shuntcurrent = await sensor.getCurrent_mA();
