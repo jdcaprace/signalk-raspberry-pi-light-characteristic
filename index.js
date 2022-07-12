@@ -212,9 +212,10 @@ module.exports = function (app) {
         console.log("lightstate inside await: " + lightstate);
       });
       await promisevoltage;
-      })();
+      
       console.log("lightstate: " + lightstate);
       return lightstate;
+      })();
     }
 
     //TODO check day-night to send warning during night only!
