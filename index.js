@@ -186,11 +186,11 @@ module.exports = function (app) {
     //Check if the light is on or off depending of the current threshold
     function checklightstate(){
       
-      
+      (async () => {
       var lightstate = 0;
       var promisevoltage = readina219();
 
-      (async () => {
+      
       promisevoltage.then((value) => {
         console.log('Interpret premise: ' + value);
         var busvoltage = value;   
@@ -209,6 +209,7 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
+        console.log("lightstate inside await: " + lightstate);
       });
       await promisevoltage;
       })();
