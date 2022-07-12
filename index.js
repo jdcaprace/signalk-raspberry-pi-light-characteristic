@@ -24,12 +24,6 @@ module.exports = function (app) {
         default: 'environment.light.state'
 		    //https://signalk.org/specification/1.5.0/doc/vesselsBranch.html
       },
-      rate: {
-        title: "Sample Rate (in minutes)",
-        description: "Sample rate to send the status of the light characteristic to the server. Cannot be inferior to the cycletime.",
-        type: 'number',
-        default: 1
-      },
       i2c_bus: {
         type: 'integer',
         title: 'I2C bus number',
@@ -46,7 +40,7 @@ module.exports = function (app) {
         type: 'number',
         title: 'Voltage multiplier',
         decription: 'Parameter that is going to multiply the voltage (default: 1) to obtain the current from external current non invasive sensor.',
-        default: 1,
+        default: 1.0,
       },
       currentrate: {
         title: 'Current sample rate',
@@ -193,7 +187,8 @@ module.exports = function (app) {
     function checklightstate(){
       var lightstate = 0;
       var busvoltage = readina219();
-      var buscurrent = busvoltage * options.voltagemultiplier;
+      console.log("The bus voltage is: " + busvoltage);
+      var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
       console.log("The bus current is: " + buscurrent);
 
       //defining the threshold
@@ -293,7 +288,7 @@ module.exports = function (app) {
         timesoff = 0;
         lightratio = 0;
         i = 0;
-      }, vcycletime * 1000);//check during one full cycletime
+      }, (vcycletime * 1000));//check during one full cycletime
     }
 
     function sendlighthealth(status){
