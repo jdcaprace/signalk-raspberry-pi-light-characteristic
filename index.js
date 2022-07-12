@@ -191,8 +191,8 @@ module.exports = function (app) {
 
       promisevoltage.then((value) => {
         console.log('Interpret premise: ' + value);
-        busvoltage = value;
-        // expected output: 123
+        var busvoltage = value;
+        
       });
 
       console.log("The bus voltage is: " + busvoltage);
