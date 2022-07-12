@@ -209,7 +209,7 @@ module.exports = function (app) {
       return lightstate;
     }
 
-    //TODO check day-night to send wanring during night only!
+    //TODO check day-night to send warning during night only!
 
     var timeson = 0;
     var timesoff = 0;
@@ -222,9 +222,21 @@ module.exports = function (app) {
     var i = 0;
     var j = 0;
 
+    function timestamp(){
+      var today = new Date();
+      var DD = String(today.getDate()).padStart(2, '0');
+      var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var YYYY = today.getFullYear();
+      var hh = today.getHours();
+      var mm = today.getMinutes();
+      var ss = today.getSeconds();
+      today = YYYY + MM + DD + hh + mm + ss;
+      return today;
+    }
+
     function countingcycletime(){
       i = i + 1;
-      console.log("Enter in countingcycletime cptr: " + i);
+      console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
       if(state == 1){
         timeson = timeson + 1;
@@ -238,7 +250,7 @@ module.exports = function (app) {
 
     //This is the global loop to repeat the measurement cycle.
     function mainrepeatmeasuring(){
-      console.log('Enter in repeatmeasuring.');
+      console.log(timestamp() + "- entering in main.");
 
       // repeat with the interval of x millisseconds
       var timerId = setInterval(() => {countingcycletime();}, options.currentrate);
@@ -257,6 +269,7 @@ module.exports = function (app) {
     // after x seconds stop and do the business.
       setTimeout(() => {
         clearInterval(timerId);//stop
+        console.log(timestamp() + "- stopping measurement.");
         j = j + 1;
         console.log("j: " + j);
         console.log("timeson: " + timeson);
