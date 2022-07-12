@@ -194,11 +194,11 @@ module.exports = function (app) {
       var lightstate = 0;
       var busvoltage = readina219();
       var buscurrent = busvoltage * options.voltagemultiplier;
-      //console.log("The bus current is: " + buscurrent);
+      console.log("The bus current is: " + buscurrent);
 
       //defining the threshold
       var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
-      //console.log("Threshold: " + threshold);
+      console.log("Threshold: " + threshold);
 
       if(buscurrent >= threshold){
         lightstate = 1;//if on = 1
@@ -261,7 +261,7 @@ module.exports = function (app) {
       //sending the result to signalK
       sendlighthealth(lighthealth);
       
-      var waitingtimebetweencycles = ((vcycletime + 5) * 1000)/3;
+      var waitingtimebetweencycles = (vcycletime * 1000)/3;
       setTimeout(mainrepeatmeasuring, waitingtimebetweencycles);//wait 1/3 of the cycle time and start again.
     }
 
@@ -293,7 +293,7 @@ module.exports = function (app) {
         timesoff = 0;
         lightratio = 0;
         i = 0;
-      }, (vcycletime + 5) * 1000);//check during one full cycletime
+      }, (vcycletime * 1000);//check during one full cycletime
     }
 
     function sendlighthealth(status){
