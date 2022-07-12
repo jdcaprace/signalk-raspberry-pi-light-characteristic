@@ -184,9 +184,9 @@ module.exports = function (app) {
     }
 
     //Check if the light is on or off depending of the current threshold
-    function checklightstate(){
+    async function checklightstate(){
       
-      (async () => {
+      //(async () => {
       var lightstate = 0;
       var promisevoltage = readina219();
 
@@ -209,13 +209,13 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
-        console.log("lightstate inside await: " + lightstate);
+        console.log("1: lightstate inside await: " + lightstate);
       });
       await promisevoltage;
       
-      console.log("lightstate: " + lightstate);
+      console.log("2: lightstate outside await: " + lightstate);
       return lightstate;
-      })();
+      //})();
     }
 
     //TODO check day-night to send warning during night only!
