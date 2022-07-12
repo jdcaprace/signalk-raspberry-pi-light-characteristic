@@ -187,29 +187,27 @@ module.exports = function (app) {
     function checklightstate(){
       var lightstate = 0;
       var promisevoltage = readina219();
-      var busvoltage = 0.0;
 
       promisevoltage.then((value) => {
         console.log('Interpret premise: ' + value);
-        var busvoltage = value;
-        
+        var busvoltage = value;   
+
+        console.log("The bus voltage is: " + busvoltage);
+        var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
+        console.log("The bus current is: " + buscurrent);
+
+        //defining the threshold
+        var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
+        console.log("Threshold: " + threshold);
+
+        if(buscurrent >= threshold){
+          lightstate = 1;//if on = 1
+        } else {
+          lightstate = 0;//if off = 0
+        }
+        console.log("lightstate: " + lightstate);
+        return lightstate;
       });
-
-      console.log("The bus voltage is: " + busvoltage);
-      var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
-      console.log("The bus current is: " + buscurrent);
-
-      //defining the threshold
-      var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
-      console.log("Threshold: " + threshold);
-
-      if(buscurrent >= threshold){
-        lightstate = 1;//if on = 1
-      } else {
-        lightstate = 0;//if off = 0
-      }
-      console.log("lightstate: " + lightstate);
-      return lightstate;
     }
 
     //TODO check day-night to send warning during night only!
