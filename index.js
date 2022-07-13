@@ -242,20 +242,24 @@ module.exports = function (app) {
 
     async function countingcycletime(){
       i = i + 1;
+      var thelightstate = 0;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
-      console.log('The checklite inside state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
+      //console.log('The checklite inside state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
 
-      state.then((value) => {console.log('Resolving the checklite state: ' + value);}); 
+      var thestate = state.then((value) => {
+        var thelightstate = value;
+        console.log('1: Resolving the checklite state: ' + thelightstate);
+      }); 
       
-      await state;
-      console.log('The checklite ouside state: ' + state);
+      await thestate;
+      console.log('2: Resolving the checklite state: ' + thelightstate);
 
-      if(state == 1){
+      if(thelightstate == 1){
         timeson = timeson + 1;
         console.log("timeson: " + timeson);
       }
-      if(state == 0){
+      if(thelightstate == 0){
         timesoff = timesoff + 1;
         console.log("timesoff: " + timesoff);
       }
