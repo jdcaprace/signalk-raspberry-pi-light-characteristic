@@ -248,9 +248,6 @@ module.exports = function (app) {
 
       state.then((value) => {console.log('Resolving the checklite state: ' + value);});
 
-      global timeson;
-      global timesoff;
-
       if(state == 1){
         timeson = timeson + 1;
         console.log("timeson: " + timeson);
