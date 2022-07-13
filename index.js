@@ -244,9 +244,12 @@ module.exports = function (app) {
       i = i + 1;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
-      console.log('The checklite state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
+      console.log('The checklite inside state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
 
-      state.then((value) => {console.log('Resolving the checklite state: ' + value);});
+      state.then((value) => {console.log('Resolving the checklite state: ' + value);}); 
+      
+      await state;
+      console.log('The checklite ouside state: ' + state);
 
       if(state == 1){
         timeson = timeson + 1;
