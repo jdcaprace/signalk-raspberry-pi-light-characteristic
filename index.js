@@ -42,6 +42,12 @@ module.exports = function (app) {
         decription: 'Parameter that is going to multiply the voltage (default: 1) to obtain the current from external current non invasive sensor.',
         default: 1.0,
       },
+      voltageoffset: {
+        type: 'number',
+        title: 'Voltage offset',
+        decription: 'Parameter that is going to offset the voltage (default: 0) to obtain the current from external current non invasive sensor.',
+        default: 0.0,
+      },
       currentrate: {
         title: 'Current sample rate',
         description: 'Current sample rate in milliseconds. Default: 100 milliseconds.',
@@ -194,7 +200,7 @@ module.exports = function (app) {
         var busvoltage = value;   
 
         //console.log("The bus voltage is: " + busvoltage);
-        var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
+        var buscurrent = (parseFloat(busvoltage) - parseFloat(options.voltageoffset)) * parseFloat(options.voltagemultiplier);
         //console.log("The bus current is: " + buscurrent);
 
         //defining the threshold
