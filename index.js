@@ -195,11 +195,11 @@ module.exports = function (app) {
 
         //console.log("The bus voltage is: " + busvoltage);
         var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
-        console.log("The bus current is: " + buscurrent);
+        //console.log("The bus current is: " + buscurrent);
 
         //defining the threshold
         var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
-        console.log("Threshold: " + threshold);
+        //console.log("Threshold: " + threshold);
 
         if(buscurrent >= threshold){
           lightstate = 1;//if on = 1
@@ -243,7 +243,7 @@ module.exports = function (app) {
     async function countingcycletime(){
       i = i + 1;
       var lightstate = 0;
-      console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
+      //console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
 
       var thestate = state.then((value) => {
@@ -257,11 +257,11 @@ module.exports = function (app) {
 
       if(lightstate == 1){
         timeson = timeson + 1;
-        console.log("timeson: " + timeson);
+        //console.log("timeson: " + timeson);
       }
       if(lightstate == 0){
         timesoff = timesoff + 1;
-        console.log("timesoff: " + timesoff);
+        //console.log("timesoff: " + timesoff);
       }
     }
 
@@ -288,14 +288,13 @@ module.exports = function (app) {
         clearInterval(timerId);//stop
         console.log(timestamp() + "- stopping measurement. RESULTS:");
         j = j + 1;
-        console.log("j: " + j);
+        //console.log("j: " + j);
         console.log("timeson: " + timeson);
         console.log("timesoff: " + timesoff);
         lightratio =  timeson / timesoff;
         console.log("reflightratio: " + reflightratio);
         console.log("lightratio: " + lightratio);
-        console.log("****************************************");
-
+        
         //Verifying if the measurement is inside the margin of tolerance
         var lowref = reflightratio - (options.errormargin * reflightratio)
         var highref = reflightratio + (options.errormargin * reflightratio)
@@ -307,6 +306,7 @@ module.exports = function (app) {
           lighthealth = 1;//Not healthy
         }
         console.log("OUTPUT - lighthealth: " + lighthealth);
+        console.log("****************************************");
         timeson = 0; //reinitialized counters and variables
         timesoff = 0;
         lightratio = 0;
