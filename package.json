@@ -4,7 +4,7 @@
   "description": "Experimental! SignalK node server plugin that check the state of the light characteristic using ina219 sensor.",
   "license": "MIT",
   "homepage": "https://github.com/jdcaprace/signalk-raspberry-pi-light-characteristic#readme",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "main": "index.js",
   "keywords": [
     "signalk-node-server-plugin"
