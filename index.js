@@ -199,9 +199,9 @@ module.exports = function (app) {
         //console.log('0: Interpret voltage premise: ' + value);
         var busvoltage = value;   
 
-        //console.log("The bus voltage is: " + busvoltage);
+        console.log("The bus voltage is: " + busvoltage);
         var buscurrent = (parseFloat(busvoltage) - parseFloat(options.voltageoffset)) * parseFloat(options.voltagemultiplier);
-        //console.log("The bus current is: " + buscurrent);
+        console.log("The bus current is: " + buscurrent);
 
         //defining the threshold
         var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
