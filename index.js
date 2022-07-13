@@ -200,7 +200,7 @@ module.exports = function (app) {
         var busvoltage = value;   
 
         console.log("The bus voltage is: " + busvoltage);
-        var buscurrent = (parseFloat(busvoltage) - parseFloat(options.voltageoffset)) * parseFloat(options.voltagemultiplier);
+        var buscurrent = (parseFloat(busvoltage) + parseFloat(options.voltageoffset)) * parseFloat(options.voltagemultiplier);
         console.log("The bus current is: " + buscurrent);
 
         //defining the threshold
