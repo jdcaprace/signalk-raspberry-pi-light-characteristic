@@ -242,24 +242,25 @@ module.exports = function (app) {
 
     async function countingcycletime(){
       i = i + 1;
-      var thelightstate = 0;
+      var lightstate = 0;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
       //console.log('The checklite inside state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
 
       var thestate = state.then((value) => {
         var thelightstate = value;
-        console.log('1: Resolving the checklite state: ' + thelightstate);
+        lightstate = thelightstate;
+        console.log('1: Resolving the checklite state: ' + lightstate);
       }); 
       
       await thestate;
-      console.log('2: Resolving the checklite state: ' + thelightstate);
+      console.log('2: Resolving the checklite state: ' + lightstate);
 
-      if(thelightstate == 1){
+      if(lightstate == 1){
         timeson = timeson + 1;
         console.log("timeson: " + timeson);
       }
-      if(thelightstate == 0){
+      if(lightstate == 0){
         timesoff = timesoff + 1;
         console.log("timesoff: " + timesoff);
       }
