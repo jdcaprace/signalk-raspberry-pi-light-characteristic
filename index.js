@@ -189,8 +189,8 @@ module.exports = function (app) {
       var lightstate = 0;
       var promisevoltage = readina219();
       
-      promisevoltage.then((value) => {
-        console.log('Interpret premise: ' + value);
+      var thepromisevoltage = promisevoltage.then((value) => {
+        console.log('0: Interpret voltage premise: ' + value);
         var busvoltage = value;   
 
         console.log("The bus voltage is: " + busvoltage);
@@ -207,11 +207,11 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
-        //console.log("1: lightstate inside await: " + lightstate);
+        console.log("1: lightstate inside await: " + lightstate);
       });
-      await promisevoltage;
+      await thepromisevoltage;
       
-      //console.log("2: lightstate outside await: " + lightstate);
+      console.log("2: lightstate outside await: " + lightstate);
       return lightstate;
     }
 
