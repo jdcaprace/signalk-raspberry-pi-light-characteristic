@@ -186,10 +186,8 @@ module.exports = function (app) {
     //Check if the light is on or off depending of the current threshold
     async function checklightstate(){
       
-      //(async () => {
       var lightstate = 0;
       var promisevoltage = readina219();
-
       
       promisevoltage.then((value) => {
         console.log('Interpret premise: ' + value);
@@ -209,13 +207,12 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
-        console.log("1: lightstate inside await: " + lightstate);
+        //console.log("1: lightstate inside await: " + lightstate);
       });
       await promisevoltage;
       
-      console.log("2: lightstate outside await: " + lightstate);
+      //console.log("2: lightstate outside await: " + lightstate);
       return lightstate;
-      //})();
     }
 
     //TODO check day-night to send warning during night only!
@@ -243,13 +240,16 @@ module.exports = function (app) {
       return today;
     }
 
-    function countingcycletime(){
+    async function countingcycletime(){
       i = i + 1;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
       console.log('The checklite state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
 
-      //state.then((value) => {console.log('Resolving the checklite state: ' + value);});
+      state.then((value) => {console.log('Resolving the checklite state: ' + value);});
+
+      global timeson;
+      global timesoff;
 
       if(state == 1){
         timeson = timeson + 1;
