@@ -190,10 +190,10 @@ module.exports = function (app) {
       var promisevoltage = readina219();
       
       var thepromisevoltage = promisevoltage.then((value) => {
-        console.log('0: Interpret voltage premise: ' + value);
+        //console.log('0: Interpret voltage premise: ' + value);
         var busvoltage = value;   
 
-        console.log("The bus voltage is: " + busvoltage);
+        //console.log("The bus voltage is: " + busvoltage);
         var buscurrent = parseFloat(busvoltage) * parseFloat(options.voltagemultiplier);
         console.log("The bus current is: " + buscurrent);
 
@@ -207,11 +207,11 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
-        console.log("1: lightstate inside await: " + lightstate);
+        //console.log("1: lightstate inside await: " + lightstate);
       });
       await thepromisevoltage;
       
-      console.log("2: lightstate outside await: " + lightstate);
+      //console.log("2: lightstate outside await: " + lightstate);
       return lightstate;
     }
 
@@ -245,16 +245,15 @@ module.exports = function (app) {
       var lightstate = 0;
       console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
-      //console.log('The checklite inside state: ' + state); //<<<<<<<<<<<<< I guess that is a premise
 
       var thestate = state.then((value) => {
         var thelightstate = value;
         lightstate = thelightstate;
-        console.log('1: Resolving the checklite state: ' + lightstate);
+        //console.log('1: Resolving the checklite state: ' + lightstate);
       }); 
       
       await thestate;
-      console.log('2: Resolving the checklite state: ' + lightstate);
+      //console.log('2: Resolving the checklite state: ' + lightstate);
 
       if(lightstate == 1){
         timeson = timeson + 1;
@@ -287,7 +286,7 @@ module.exports = function (app) {
     // after x seconds stop and do the business.
       setTimeout(() => {
         clearInterval(timerId);//stop
-        console.log(timestamp() + "- stopping measurement.");
+        console.log(timestamp() + "- stopping measurement. RESULTS:");
         j = j + 1;
         console.log("j: " + j);
         console.log("timeson: " + timeson);
@@ -295,6 +294,7 @@ module.exports = function (app) {
         lightratio =  timeson / timesoff;
         console.log("reflightratio: " + reflightratio);
         console.log("lightratio: " + lightratio);
+        console.log("****************************************");
 
         //Verifying if the measurement is inside the margin of tolerance
         var lowref = reflightratio - (options.errormargin * reflightratio)
