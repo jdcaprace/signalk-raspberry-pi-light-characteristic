@@ -129,20 +129,20 @@ module.exports = function (app) {
       await sensor.calibrate32V2A();
 
 		  var busvoltage = await sensor.getBusVoltage_V();
-      console.log("Bus voltage (V): " + busvoltage);
+      app.debug("Bus voltage (V): " + busvoltage);
       const shuntvoltage = await sensor.getShuntVoltage_mV();
-      //console.log("Shunt voltage (mV): " + shuntvoltage);
+      //app.debug("Shunt voltage (mV): " + shuntvoltage);
       const shuntcurrent = await sensor.getCurrent_mA();
-      //console.log("Shunt Current (mA): " + shuntcurrent);
+      //app.debug("Shunt Current (mA): " + shuntcurrent);
 
       // Change units to be compatible with SignalK
 	    var shuntcurrentA = shuntcurrent / 1000;
-	    //console.log("Load Current (A): " + shuntcurrentA);
+	    //app.debug("Load Current (A): " + shuntcurrentA);
 	    var loadvoltageV = busvoltage + (shuntvoltage / 1000);
-	    //console.log("Load voltage (V): " + loadvoltageV);
+	    //app.debug("Load voltage (V): " + loadvoltageV);
       
       //app.catch((err) => {
-      //console.log(`ina219 read error: ${err}`);
+      //app.debug(`ina219 read error: ${err}`);
       //});
       return busvoltage;
     }
@@ -157,7 +157,7 @@ module.exports = function (app) {
           }
         })
       }
-      console.log("cycletime: " + cycletime);
+      app.debug("cycletime: " + cycletime);
       return cycletime;
     }
 
@@ -171,7 +171,7 @@ module.exports = function (app) {
           }
         })
       }
-      console.log("ontime: " + ontime);
+      app.debug("ontime: " + ontime);
       return ontime;
     }
 
@@ -185,7 +185,7 @@ module.exports = function (app) {
           }
         })
       }
-      console.log("offtime: " + offtime);
+      app.debug("offtime: " + offtime);
       return offtime;
     }
 
@@ -196,16 +196,16 @@ module.exports = function (app) {
       var promisevoltage = readina219();
       
       var thepromisevoltage = promisevoltage.then((value) => {
-        //console.log('0: Interpret voltage premise: ' + value);
+        //app.debug('0: Interpret voltage premise: ' + value);
         var busvoltage = value;   
 
-        console.log("The bus voltage is: " + busvoltage);
+        app.debug("The bus voltage is: " + busvoltage);
         var buscurrent = (parseFloat(busvoltage) + parseFloat(options.voltageoffset)) * parseFloat(options.voltagemultiplier);
-        console.log("The bus current is: " + buscurrent);
+        app.debug("The bus current is: " + buscurrent);
 
         //defining the threshold
         var threshold = options.lowcurrent + ((options.highcurrent - options.lowcurrent) / 2);
-        //console.log("Threshold: " + threshold);
+        //app.debug("Threshold: " + threshold);
 
         if(buscurrent >= threshold){
           lightstate = 1;//if on = 1
@@ -213,11 +213,11 @@ module.exports = function (app) {
           lightstate = 0;//if off = 0
         }
 
-        //console.log("1: lightstate inside await: " + lightstate);
+        //app.debug("1: lightstate inside await: " + lightstate);
       });
       await thepromisevoltage;
       
-      //console.log("2: lightstate outside await: " + lightstate);
+      //app.debug("2: lightstate outside await: " + lightstate);
       return lightstate;
     }
 
@@ -249,31 +249,31 @@ module.exports = function (app) {
     async function countingcycletime(){
       i = i + 1;
       var lightstate = 0;
-      //console.log(timestamp() + "- entering in countingcycletime cptr: " + i);
+      //app.debug(timestamp() + "- entering in countingcycletime cptr: " + i);
       var state = checklightstate();
 
       var thestate = state.then((value) => {
         var thelightstate = value;
         lightstate = thelightstate;
-        //console.log('1: Resolving the checklite state: ' + lightstate);
+        //app.debug('1: Resolving the checklite state: ' + lightstate);
       }); 
       
       await thestate;
-      //console.log('2: Resolving the checklite state: ' + lightstate);
+      //app.debug('2: Resolving the checklite state: ' + lightstate);
 
       if(lightstate == 1){
         timeson = timeson + 1;
-        //console.log("timeson: " + timeson);
+        //app.debug("timeson: " + timeson);
       }
       if(lightstate == 0){
         timesoff = timesoff + 1;
-        //console.log("timesoff: " + timesoff);
+        //app.debug("timesoff: " + timesoff);
       }
     }
 
     //This is the global loop to repeat the measurement cycle.
     function mainrepeatmeasuring(){
-      console.log(timestamp() + "- entering in main.");
+      app.debug(timestamp() + "- entering in main.");
 
       // repeat with the interval of x millisseconds
       var timerId = setInterval(() => {countingcycletime();}, options.currentrate);
@@ -292,27 +292,27 @@ module.exports = function (app) {
     // after x seconds stop and do the business.
       setTimeout(() => {
         clearInterval(timerId);//stop
-        console.log(timestamp() + "- stopping measurement. RESULTS:");
+        app.debug(timestamp() + "- stopping measurement. RESULTS:");
         j = j + 1;
-        //console.log("j: " + j);
-        console.log("timeson: " + timeson);
-        console.log("timesoff: " + timesoff);
+        //app.debug("j: " + j);
+        app.debug("timeson: " + timeson);
+        app.debug("timesoff: " + timesoff);
         lightratio =  timeson / timesoff;
-        console.log("reflightratio: " + reflightratio);
-        console.log("lightratio: " + lightratio);
+        app.debug("reflightratio: " + reflightratio);
+        app.debug("lightratio: " + lightratio);
         
         //Verifying if the measurement is inside the margin of tolerance
         var lowref = reflightratio - (options.errormargin * reflightratio)
         var highref = reflightratio + (options.errormargin * reflightratio)
-        console.log("lowref: " + lowref);
-        console.log("highref: " + highref);
+        app.debug("lowref: " + lowref);
+        app.debug("highref: " + highref);
         if(lightratio >= lowref && lightratio <= highref){
           lighthealth = 0;//Healthy
         } else {
           lighthealth = 1;//Not healthy
         }
-        console.log("OUTPUT - lighthealth: " + lighthealth);
-        console.log("****************************************");
+        app.debug("OUTPUT - lighthealth: " + lighthealth);
+        app.debug("****************************************");
         timeson = 0; //reinitialized counters and variables
         timesoff = 0;
         lightratio = 0;
